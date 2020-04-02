@@ -33,43 +33,61 @@ mods = {
     'files': []
 }
 
-# If a mod fails to get added, add it to a queue to be logged at the end
-failureQueue = []
+# Mod log function
+line = -1
+
+def log(s):
+    global line
+    print('LINE #' + str(line).zfill(4) + ': ' + s)
 
 # For every mod id
 for projectID in i:
+    line += 1
+
+    # Remove whitespace
+    projectID = projectID.strip()
+
+    # Skip blank lines
+    if not projectID:
+        continue
+
+    # Skip comments
+    if projectID.startswith('#'):
+        continue
+
     # API GET Request
-    data = requests.get('https://addons-ecs.forgesvc.net/api/v2/addon/' + projectID, headers=headers).json()
+    req = requests.get('https://addons-ecs.forgesvc.net/api/v2/addon/' + projectID, headers=headers)
+
+    # Skip non-existent mods
+    if req.status_code == 404:
+        log('Failed to add mod. Not found.')
+        continue
+
+    data = req.json()
 
     # Gets mod name
     modname = data['name']
 
-    # Used to check if mod was successfully added
-    buildExists = False
-
     # Gets file id for latest build in desired mc version
     for key in data['gameVersionLatestFiles']:
+
+        buildExists = False
         # If mod has desired mc version
         if key['gameVersion'] == manifest['minecraft']['version']:
             # Prepares json for mod
             mod = {}
-            mod['!'] = modname + ' (' + key['projectFileName'] + ')'
+            mod['alias'] = modname + ' (' + key['projectFileName'] + ')'
             mod['projectID'] = int(projectID)
             mod['fileID'] = key['projectFileId']
             mod['required'] = True
 
             mods['files'].append(mod)
-            print('Added \'' + modname + '\' for MC ' + key['gameVersion'] + ' (' + key['projectFileName'] + ')')
+            log('Added [' + modname + '] (' + key['projectFileName'] + ')')
             buildExists = True
             break
-    
-    if buildExists != True:
-        failureQueue.append(modname)
-
-# Logs mods that don't have a build for the desired version
-if failureQueue:
-    print('\nThe following mods lack a build for MC ' + manifest['minecraft']['version'] + ', and were not added.')
-    print(failureQueue)
+        
+    if not buildExists:
+        log('Failed to add [' + modname + '], no build for MC ' + manifest['minecraft']['version'])
 
 # Add files object to manifest
 manifest['files'] = mods['files']
