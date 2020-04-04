@@ -3,6 +3,7 @@
 
 import requests
 import json
+import sys
 
 # Prepare headers with unique user-agent
 headers = {'User-Agent': 'modmanifestgen'}
@@ -25,8 +26,15 @@ for key in modLoaderData.json():
             modLoaders.append({"id":key['name'], "primary":True})
             manifest['minecraft']["modLoaders"] = modLoaders
 
-# Reads mod list
-i = open('mods.txt')
+# Reads file from drag and drop or first argument, otherwise emods.txt
+if(len(sys.argv) > 1):
+    i = open(sys.argv[1], 'r')
+else:
+    try:
+        i = open('mods.txt')
+    except FileNotFoundError:
+        print('Error. Default mods list (mods.txt) not found; either create it or use another file in the argument/drag and drop.')
+        exit()
 
 # Prepares output file
 mods = {
@@ -53,6 +61,7 @@ for projectID in i:
 
     # Skip comments
     if projectID.startswith('#'):
+        print(projectID)
         continue
 
     # API GET Request
