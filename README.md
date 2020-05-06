@@ -29,4 +29,4 @@ An example modpack is included to guide you.
    Move that to your modpack folder, zip it up, and your modpack should import into MultiMC perfectly.
 
 ## Download
-There are no compiled releases. Clone or download the source, or [click here](https://github.com/jadc/modular-modpack-manifest-generator/archive/master.zip)
+There are no compiled releases. Clone or download the source.
