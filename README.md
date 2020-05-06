@@ -3,7 +3,7 @@ A small python script that automatically generates a `manifest.json` file for yo
 It automatically downloads the latest release of forge and each mod for your desired Minecraft version.
 
 ## Difference
-This is a fork of the [modpack-manifest-generator](https://github.com/jadc/modpack-manifest-generator)
+This is a fork of the [modpack-manifest-generator](https://github.com/jadc/modpack-manifest-generator).
 
 That generator uses a single list file, called `mods.txt`, with each mod id on a new line.  
 This generator reads individual file names in a folder.
