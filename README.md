@@ -15,6 +15,7 @@ tl;dr: If you are making a modpack by yourself, the original [modpack-manifest-g
 ## Instructions
 An example modpack is included to guide you.
 
+0. Ensure you have Python 3 installed, it's in your PATH, and you havee the requests module installed. `python -m pip install requests`
 1. Navigate to the `mods` folder. Create a new folder if you want to organize, otherwise create a new text document. (extension does not matter)
 2. Name the new text document the project ID of each mod you want.  
    ![Project ID](https://i.imgur.com/sSSJuMi.png)
